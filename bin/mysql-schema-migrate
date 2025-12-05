@@ -28,6 +28,6 @@ use MysqlSchemaMigrate\Command\ImportCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application('MySQL Schema Migrate', '1.0.0');
-$application->add(new ExportCommand());
-$application->add(new ImportCommand());
+$application->addCommand(new ExportCommand());
+$application->addCommand(new ImportCommand());
 $application->run();
