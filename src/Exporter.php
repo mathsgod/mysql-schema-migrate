@@ -152,6 +152,8 @@ class Exporter
                 $length = (int) $column['CHARACTER_MAXIMUM_LENGTH'];
             }
 
+            $isDefaultExpression = str_contains($column['EXTRA'], 'DEFAULT_GENERATED');
+
             $columnData = [
                 'name' => $column['COLUMN_NAME'],
                 'type' => $column['DATA_TYPE'],
@@ -159,6 +161,10 @@ class Exporter
                 'default' => $column['COLUMN_DEFAULT'],
                 'auto_increment' => str_contains($column['EXTRA'], 'auto_increment'),
             ];
+
+            if ($isDefaultExpression) {
+                $columnData['default_expression'] = true;
+            }
 
             if ($unsigned) {
                 $columnData['unsigned'] = true;

@@ -387,7 +387,7 @@ class Importer
     private function columnNeedsModification(array $current, array $target): bool
     {
         $compareFields = [
-            'type', 'nullable', 'default', 'auto_increment', 'unsigned',
+            'type', 'nullable', 'default', 'default_expression', 'auto_increment', 'unsigned',
             'length', 'precision', 'scale', 'charset', 'collation', 'comment', 'values'
         ];
 
@@ -476,8 +476,10 @@ class Importer
         // Default
         if (array_key_exists('default', $column) && $column['default'] !== null) {
             $default = $column['default'];
-            // Check for MySQL expressions
-            if (in_array(strtoupper($default), ['CURRENT_TIMESTAMP', 'CURRENT_DATE', 'NULL']) 
+            if (!empty($column['default_expression'])) {
+                // Expression default (e.g. uuid(), now()) — must wrap in parentheses
+                $sql .= " DEFAULT ({$default})";
+            } elseif (in_array(strtoupper($default), ['CURRENT_TIMESTAMP', 'CURRENT_DATE', 'NULL']) 
                 || preg_match('/^[A-Z_]+\(/i', $default)) {
                 $sql .= " DEFAULT {$default}";
             } else {
