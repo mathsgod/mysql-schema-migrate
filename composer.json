@@ -21,7 +21,15 @@
             "MysqlSchemaMigrate\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "MysqlSchemaMigrate\\Tests\\": "tests/"
+        }
+    },
     "bin": [
         "bin/mysql-schema-migrate"
-    ]
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^12.5"
+    }
 }
